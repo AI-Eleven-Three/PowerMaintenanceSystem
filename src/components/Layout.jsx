@@ -1,5 +1,6 @@
 import { Link, useLocation, Outlet } from 'react-router-dom'
-import { LayoutDashboard, Settings, Box, FileText, Activity, BarChart3, Shield } from 'lucide-react'
+import { LayoutDashboard, Settings, Box, FileText, Activity, BarChart3, Shield, LogOut } from 'lucide-react'
+import { useAuth } from '../context/AuthContext'
 
 const menuItems = [
   { path: '/', label: '仪表盘', icon: LayoutDashboard },
@@ -12,6 +13,11 @@ const menuItems = [
 
 export default function Layout() {
   const location = useLocation()
+  const { logout } = useAuth()
+
+  const handleLogout = () => {
+    logout()
+  }
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -45,10 +51,17 @@ export default function Layout() {
             <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
               <span className="text-sm font-medium">管</span>
             </div>
-            <div>
+            <div className="flex-1">
               <p className="text-sm font-medium">管理员</p>
               <p className="text-xs text-gray-400">系统管理员</p>
             </div>
+            <button
+              onClick={handleLogout}
+              className="p-2 text-gray-400 hover:text-white hover:bg-slate-700 rounded-lg transition-colors"
+              title="退出登录"
+            >
+              <LogOut size={20} />
+            </button>
           </div>
         </div>
       </aside>
