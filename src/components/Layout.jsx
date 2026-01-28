@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, Outlet } from 'react-router-dom'
 import { LayoutDashboard, Settings, Box, FileText, Activity, BarChart3, Shield } from 'lucide-react'
 
 const menuItems = [
@@ -10,7 +10,7 @@ const menuItems = [
   { path: '/permissions', label: '权限矩阵', icon: Shield },
 ]
 
-export default function Layout({ children }) {
+export default function Layout() {
   const location = useLocation()
 
   return (
@@ -52,15 +52,8 @@ export default function Layout({ children }) {
           </div>
         </div>
       </aside>
-      <main className="flex-1 overflow-auto">
-        <header className="bg-white shadow-sm px-8 py-4">
-          <h2 className="text-2xl font-semibold text-gray-800">
-            {menuItems.find(item => item.path === location.pathname)?.label || '仪表盘'}
-          </h2>
-        </header>
-        <div className="p-8">
-          {children}
-        </div>
+      <main className="flex-1 overflow-auto p-6">
+        <Outlet />
       </main>
     </div>
   )

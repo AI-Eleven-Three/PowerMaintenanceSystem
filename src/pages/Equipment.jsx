@@ -17,6 +17,7 @@ export default function Equipment() {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterType, setFilterType] = useState('全部')
   const [filterStatus, setFilterStatus] = useState('全部')
+  const [filterVoltage, setFilterVoltage] = useState('全部')
   const [showModal, setShowModal] = useState(false)
   const [isEditMode, setIsEditMode] = useState(false)
   const [editingId, setEditingId] = useState(null)
@@ -34,13 +35,15 @@ export default function Equipment() {
 
   const equipmentTypes = ['全部', '变压器', '开关柜', '电缆', '互感器']
   const statusOptions = ['全部', '运行中', '故障', '维护中']
+  const voltageOptions = ['全部', '10kV', '35kV', '110kV', '220kV', '500kV']
 
   const filteredData = equipmentData.filter(item => {
     const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          item.id.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesType = filterType === '全部' || item.type === filterType
     const matchesStatus = filterStatus === '全部' || item.status === filterStatus
-    return matchesSearch && matchesType && matchesStatus
+    const matchesVoltage = filterVoltage === '全部' || item.voltage === filterVoltage
+    return matchesSearch && matchesType && matchesStatus && matchesVoltage
   })
 
   const validateForm = () => {
@@ -154,36 +157,57 @@ export default function Equipment() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div className="flex gap-4 flex-1">
+      <div className="flex justify-between items-end gap-4">
+        <div className="flex gap-4 flex-1 items-end">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-            <input
-              type="text"
-              placeholder="搜索设备名称或编号..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <label className="block text-sm font-medium text-gray-700 mb-1">搜索设备</label>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <input
+                type="text"
+                placeholder="搜索设备名称或编号..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
           </div>
-          <select
-            value={filterType}
-            onChange={(e) => setFilterType(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            {equipmentTypes.map(type => (
-              <option key={type} value={type}>{type}</option>
-            ))}
-          </select>
-          <select
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            {statusOptions.map(status => (
-              <option key={status} value={status}>{status}</option>
-            ))}
-          </select>
+          <div className="min-w-[150px]">
+            <label className="block text-sm font-medium text-gray-700 mb-1">设备类型</label>
+            <select
+              value={filterType}
+              onChange={(e) => setFilterType(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {equipmentTypes.map(type => (
+                <option key={type} value={type}>{type}</option>
+              ))}
+            </select>
+          </div>
+          <div className="min-w-[150px]">
+            <label className="block text-sm font-medium text-gray-700 mb-1">设备状态</label>
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {statusOptions.map(status => (
+                <option key={status} value={status}>{status}</option>
+              ))}
+            </select>
+          </div>
+          <div className="min-w-[150px]">
+            <label className="block text-sm font-medium text-gray-700 mb-1">电压等级</label>
+            <select
+              value={filterVoltage}
+              onChange={(e) => setFilterVoltage(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {voltageOptions.map(voltage => (
+                <option key={voltage} value={voltage}>{voltage}</option>
+              ))}
+            </select>
+          </div>
         </div>
         <button 
           onClick={openAddModal}
